@@ -2,6 +2,24 @@
 import cerrarModal from '../assets/img/cerrar.svg';
 
 const emit = defineEmits(['ocultar-modal']);
+const props = defineProps({
+  modal: {
+    type: Object,
+    requerid: true,
+  },
+  nombre: {
+    type: String,
+    requerid: true,
+  },
+  cantidad: {
+    type: [String, Number],
+    requerid: true,
+  },
+  categoria: {
+    type: String,
+    requerid: true,
+  },
+});
 </script>
 
 <template>
@@ -13,12 +31,19 @@ const emit = defineEmits(['ocultar-modal']);
         @click="$emit('ocultar-modal')" />
     </div>
 
-    <div class="contenedor">
+    <div
+      class="contenedor contenedor-formulario"
+      :class="[modal.animar ? 'animar' : 'cerrar']">
       <form class="nuevo-gasto">
         <legend>Añadir Gastos</legend>
+
         <div class="campo">
           <label for="nombre">Nombre Gasto:</label>
-          <input type="number" id="nombre" placeholder="Añade el Gasto" />
+          <input
+            type="text"
+            id="nombre"
+            placeholder="Añade el Gasto"
+            :value="nombre" />
         </div>
 
         <div class="campo">
@@ -26,12 +51,13 @@ const emit = defineEmits(['ocultar-modal']);
           <input
             type="number"
             id="cantidad"
-            placeholder="Añade la cantidad del Gasto, ej. 300" />
+            placeholder="Añade la cantidad del Gasto, ej. 300"
+            :value="cantidad" />
         </div>
 
         <div class="campo">
           <label for="categoria">Categoria:</label>
-          <select id="categoria">
+          <select id="categoria" :value="categoria">
             <option value="">-- Selecciona --</option>
             <option value="ahorro">Ahorro</option>
             <option value="comida">Comida</option>
@@ -61,6 +87,19 @@ const emit = defineEmits(['ocultar-modal']);
   position: absolute;
   right: 3rem;
   top: 3rem;
+}
+
+.contenedor-formulario {
+  transition-property: all;
+  transition-duration: 300ms;
+  transition-timing-function: ease-in;
+  opacity: 0;
+}
+.contenedor-formulario.animar {
+  opacity: 1;
+}
+.contenedor-formulario.cerrar {
+  opacity: 0;
 }
 .cerrar-modal img {
   width: 3rem;
