@@ -1,5 +1,5 @@
 <script setup>
-import { ref, reactive, watch } from 'vue';
+import { ref, reactive, watch, computed } from 'vue';
 import { generarId } from './helpers/index';
 import Presupuesto from './components/Presupuesto.vue';
 import Gasto from './components/Gasto.vue';
@@ -110,7 +110,11 @@ const eliminarGasto = () => {
 
   ocultarModal();
 };
-
+const gastosFiltrados = computed(() => {
+  return filtro.value
+    ? gastos.value.filter((gasto) => gasto.categoria === filtro.value)
+    : gastos.value;
+});
 </script>
 
 <template>
@@ -133,9 +137,9 @@ const eliminarGasto = () => {
     <main v-if="presupuesto > 0">
       <Filtros v-model:filtro="filtro" />
       <div class="listado-gastos contenedor">
-        <h2>{{ gastos.length > 0 ? 'gastos' : 'no hay gastos' }}</h2>
+        <h2>{{ gastosFiltrados.length > 0 ? 'gastos' : 'no hay gastos' }}</h2>
         <Gasto
-          v-for="gasto in gastos"
+          v-for="gasto in gastosFiltrados"
           :key="gasto.id"
           :gasto="gasto"
           @seleccionar-gasto="seleccionarGasto" />
