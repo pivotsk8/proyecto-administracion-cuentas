@@ -1,5 +1,5 @@
 <script setup>
-import { ref, reactive, watch, computed } from 'vue';
+import { ref, reactive, watch, computed, onMounted } from 'vue';
 import { generarId } from './helpers/index';
 import Presupuesto from './components/Presupuesto.vue';
 import Gasto from './components/Gasto.vue';
@@ -27,6 +27,8 @@ const gasto = reactive({
 });
 const gastos = ref([]);
 
+//👉 Watchers
+//la propiedad Deep se usa para los objetos que vea los cambios en profundida
 watch(
   gastos,
   () => {
@@ -37,6 +39,7 @@ watch(
 
     gastado.value = totalGastado;
     disponible.value = presupuesto.value - totalGastado;
+    localStorage.setItem('gastos', JSON.stringify(gastos.value));
   },
   { deep: true },
 );
@@ -51,6 +54,24 @@ watch(
   },
   { deep: true },
 );
+
+watch(presupuesto, () => {
+  localStorage.setItem('presupuesto', presupuesto.value);
+});
+
+//👉onMounted
+onMounted(() => {
+  const presuspuestoStorage = localStorage.getItem('presupuesto');
+  if (presuspuestoStorage) {
+    presupuesto.value = Number(presuspuestoStorage);
+    disponible.value = Number(presuspuestoStorage);
+  }
+
+  const gastosStorage = localStorage.getItem('gastos');
+  if (gastosStorage) {
+    gastos.value = JSON.parse(gastosStorage);
+  }
+});
 
 const reiniciarStateGasto = () => {
   Object.assign(gasto, {
