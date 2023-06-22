@@ -1,6 +1,6 @@
 <script setup>
 import { ref, reactive } from 'vue';
-import { generarId} from './helpers/index';
+import { generarId } from './helpers/index';
 import Presupuesto from './components/Presupuesto.vue';
 import Gasto from './components/Gasto.vue';
 import ControlPresupuesto from './components/ControlPresupuesto.vue';
@@ -59,7 +59,7 @@ const guardarGasto = () => {
 </script>
 
 <template>
-  <div>
+  <div :class="{ fijar: modal.mostrar }">
     <header>
       <h1>Gastos</h1>
 
@@ -77,11 +77,7 @@ const guardarGasto = () => {
     <main v-if="presupuesto > 0">
       <div class="listado-gastos contenedor">
         <h2>{{ gastos.length > 0 ? 'gastos' : 'no hay gastos' }}</h2>
-        <Gasto 
-        v-for="gasto in gastos" 
-        :key="gasto.id" 
-        :gasto="gasto" 
-        />
+        <Gasto v-for="gasto in gastos" :key="gasto.id" :gasto="gasto" />
       </div>
 
       <div class="crear-gasto">
@@ -138,6 +134,11 @@ h1 {
 
 h2 {
   font-size: 3rem;
+}
+
+.fijar {
+  overflow: hidden;
+  height: 100vh;
 }
 
 header {
