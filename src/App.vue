@@ -1,5 +1,5 @@
 <script setup>
-import { ref, reactive } from 'vue';
+import { ref, reactive, watch } from 'vue';
 import { generarId } from './helpers/index';
 import Presupuesto from './components/Presupuesto.vue';
 import Gasto from './components/Gasto.vue';
@@ -14,6 +14,7 @@ const modal = reactive({
 });
 const presupuesto = ref(0);
 const disponible = ref(0);
+const gastado = ref(0);
 const gasto = reactive({
   nombre: '',
   cantidad: '',
@@ -22,6 +23,20 @@ const gasto = reactive({
   fecha: Date.now(),
 });
 const gastos = ref([]);
+
+watch(
+  gastos,
+  () => {
+    const totalGastado = gastos.value.reduce(
+      (total, gasto) => gasto.cantidad + total,
+      0,
+    );
+
+    gastado.value = totalGastado;
+    disponible.value = presupuesto.value - totalGastado;
+  },
+  { deep: true },
+);
 
 const definirPresupuesto = (cantidad) => {
   presupuesto.value = cantidad;
@@ -70,6 +85,7 @@ const guardarGasto = () => {
         <ControlPresupuesto
           :presupuesto="presupuesto"
           :disponible="disponible"
+          :gastado="gastado"
           v-else />
       </div>
     </header>
