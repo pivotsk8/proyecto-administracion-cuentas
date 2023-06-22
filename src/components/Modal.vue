@@ -16,30 +16,34 @@ const emit = defineEmits([
 const props = defineProps({
   modal: {
     type: Object,
-    requerid: true,
+    required: true,
   },
   nombre: {
     type: String,
-    requerid: true,
+    required: true,
   },
   cantidad: {
     type: [String, Number],
-    requerid: true,
+    required: true,
   },
   categoria: {
     type: String,
-    requerid: true,
+    required: true,
+  },
+  disponible: {
+    type: Number,
+    required: true,
   },
 });
 
 const agregarGasto = () => {
   //validar campos
-  const { cantidad, categoria, nombre } = props;
+  const { cantidad, categoria, nombre, diesponible } = props;
   if ([nombre, categoria, cantidad].includes('')) {
     error.value = 'Todos los campos son Obligatorios';
     setTimeout(() => {
       error.value = '';
-    }, 300);
+    }, 3000);
     return;
   }
   // Validar cantidad
@@ -47,9 +51,19 @@ const agregarGasto = () => {
     error.value = 'Cantidad no validad';
     setTimeout(() => {
       error.value = '';
-    }, 300);
+    }, 3000);
     return;
   }
+
+  //validar que se excedio el presupuesto
+  if (cantidad > 0) {
+    error.value = 'Has excedido el Presupuesto';
+    setTimeout(() => {
+      error.value = '';
+    }, 3000);
+    return;
+  }
+
   emit('guardar-gasto');
 };
 </script>
