@@ -136,6 +136,12 @@ const gastosFiltrados = computed(() => {
     ? gastos.value.filter((gasto) => gasto.categoria === filtro.value)
     : gastos.value;
 });
+
+const resetApp = () => {
+  confirm('¿Deseas reiniciar presupuesto?')
+    ? ((gastos.value = []), (presupuesto.value = 0))
+    : null;
+};
 </script>
 
 <template>
@@ -148,6 +154,7 @@ const gastosFiltrados = computed(() => {
           v-if="presupuesto === 0"
           @definir-presupuesto="definirPresupuesto" />
         <ControlPresupuesto
+          @reset-app="resetApp"
           :presupuesto="presupuesto"
           :disponible="disponible"
           :gastado="gastado"
